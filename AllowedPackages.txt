@@ -20,3 +20,6 @@ scala/util/control
 scala/util/grammar
 scala/util/logging
 scala/util/regexp
+clojure/lang
+clojure/core
+clojure/string

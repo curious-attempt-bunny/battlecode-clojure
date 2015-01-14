@@ -18,6 +18,8 @@
 
   <fileset id="scala.files" dir="${path.lib}" includes="scala-*.jar"/>
   <pathconvert property="scala" refid="scala.files" setonempty="false"/>
+  <fileset id="clojure.files" dir="${path.lib}" includes="clojure-*.jar"/>
+  <pathconvert property="clojure" refid="clojure.files" setonempty="false"/>
   
   <path id="classpath.run">
     <dirset dir="${path.bin}"/>
@@ -55,7 +57,25 @@
     </scalac>
   </target>
 
-  <target name="build" depends="-init,build-scala">
+  <target name="build-clojure" if="clojure">
+    <java classname="clojure.lang.Compile"
+          fork="true"
+          failonerror="true"
+          dir="${path.teams}"
+          classpathref="classpath.run">
+      <classpath>
+        <pathelement location="${path.bin}" />
+        <pathelement location="${path.teams}" />
+        <fileset dir="${path.lib}">
+          <include name="clojure-1.6.0.jar"/>
+        </fileset>
+      </classpath>
+      <sysproperty key="clojure.compile.path" value="${path.bin}" />
+      <arg value="clojurebot.robotplayer" />
+    </java>
+  </target>
+
+  <target name="build" depends="-init,build-scala,build-clojure">
     <javac 
      classpathref="classpath.run" 
      destdir="${path.bin}" 
